@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: javascript-eks-app-01-cfgstore-deployment
+  namespace: cicd-test-env-01
+  labels:
+    app: javascript-eks-app-01-cfgstore
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: javascript-eks-app-01-cfgstore
+  template:
+    metadata:
+      labels:
+        app: javascript-eks-app-01-cfgstore
+    spec:
+      containers:
+        - name: javascript-eks-app-01-cfgstore
+          image: 000000000000.dkr.ecr.ap-northeast-2.amazonaws.com/ecr-env-svcname-appname:aaaaaaaa
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
