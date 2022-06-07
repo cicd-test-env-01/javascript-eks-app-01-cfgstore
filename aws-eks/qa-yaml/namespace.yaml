@@ -1,0 +1,6 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: <INPUT_SVC_NAME>
+  labels:
+    name: <INPUT_SVC_NAME>

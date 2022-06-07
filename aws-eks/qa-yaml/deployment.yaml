@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: <INPUT_APP_NAME>-deployment
+  namespace: <INPUT_SVC_NAME>
+  labels:
+    app: <INPUT_APP_NAME>
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: <INPUT_APP_NAME>
+  template:
+    metadata:
+      labels:
+        app: <INPUT_APP_NAME>
+    spec:
+      containers:
+        - name: <INPUT_APP_NAME>
+          image: 000000000000.dkr.ecr.ap-northeast-2.amazonaws.com/ecr-env-svcname-appname:aaaaaaaa
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080

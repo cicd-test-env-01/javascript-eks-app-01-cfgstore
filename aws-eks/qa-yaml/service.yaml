@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: <INPUT_APP_NAME>-service
+  namespace: <INPUT_SVC_NAME>
+  labels:
+    app: <INPUT_APP_NAME>
+spec:
+  selector:
+    app: <INPUT_APP_NAME>
+  ports:
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP
+  type: NodePort
