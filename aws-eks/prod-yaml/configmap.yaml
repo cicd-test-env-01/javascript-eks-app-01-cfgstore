@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: <INPUT_APP_NAME>-configmap
+    namespace: <INPUT_SVC_NAME>
+data:
+    web.properties: |
+        sample.property="api.kubernetes.com"

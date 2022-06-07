@@ -1,0 +1,220 @@
+# ====================================================================================== #
+#
+#  Workflow : AWS 환경 Cfgstore 취합 파이프라인
+#
+#  Workflow 설명 :
+#    - 각 dev, qa, prod 브랜치의 HEAD에 있는 Configuration 파일을 cfgstore-consolidate 브랜치로 취합
+#
+#  Workflow 상세 가이드 :
+#    - https://lgu-cto.atlassian.net/wiki/spaces/CLOUDASSET/pages/37494850676/Config+Repo+Workflow
+#
+#  버전 : v1.0 
+#
+# ====================================================================================== #
+name: Config 파일 취합
+
+on:
+  push:
+    branches:
+      - dev
+      - qa
+      - prod
+    paths-ignore:
+      - '.github/**'
+  workflow_dispatch:
+
+jobs:
+  check-files:
+    name: 취합 대상 확인
+    runs-on: ubuntu-latest
+    outputs:
+      config_flag: ${{ steps.check.outputs.config_flag }}
+      eks_flag: ${{ steps.check.outputs.eks_flag }}
+      codedeploy_flag: ${{ steps.check.outputs.codedeploy_flag }}
+
+    steps:
+    - name: 개발 브랜치 Checkout
+      uses: actions/checkout@v3
+      with:
+        ref: dev
+        path: dev-branch
+        token: ${{ secrets.GHP_TOKEN }}
+
+    - name: 대상 확인
+      working-directory: dev-branch
+      id: check
+      run: |
+        echo "========== Configuration 폴더 확인 =========="
+        if [[ -d ./configuration ]]
+        then
+          echo "Configuration True"
+          CONFIG_FLAG=true
+        else
+          echo "Configuration False"
+          CONFIG_FLAG=false
+        fi
+        echo ""
+        echo "========== EKS 폴더 확인 =========="
+        if [[ -d ./aws-eks ]]
+        then
+          echo "EKS True"
+          EKS_FLAG=true
+        else
+          echo "EKS False"
+          EKS_FLAG=false
+        fi
+        echo ""
+        echo "========== CodeDeploy 폴더 확인 =========="
+        if [[ -d ./aws-codedeploy ]]
+        then
+          echo "CodeDeploy True"
+          CODEDEPLOY_FLAG=true
+        else
+          echo "CodeDeploy False"
+          CODEDEPLOY_FLAG=false
+        fi
+
+        echo "::set-output name=config_flag::${CONFIG_FLAG}"
+        echo "::set-output name=eks_flag::${EKS_FLAG}"
+        echo "::set-output name=codedeploy_flag::${CODEDEPLOY_FLAG}"
+
+    - name: 취합 브랜치 확인
+      working-directory: dev-branch
+      run: |
+        git fetch
+        CHK_BRANCH=`git branch -r | grep origin/cfgstore-consolidate | wc -l`
+
+        if [[ ${CHK_BRANCH} == 0 ]]
+        then
+          git checkout -b cfgstore-consolidate
+          git config user.name cfgstore.consolidate
+          git config user.email cfgstore.consolidate@lguplus.co.kr
+          git rm -rf ./*
+          git rm -rf ./.github
+          git add .
+          git commit -m "cfgstore-consolidate 생성 - $(date)"
+          git push --set-upstream origin cfgstore-consolidate
+        else
+          echo "cfgstore-consolidate 브랜치 확인"
+        fi
+
+  config-diff:
+    name: Config 취합
+    runs-on: ubuntu-latest
+    needs: check-files
+
+    steps:
+    - name: DEV Config Checkout
+      uses: actions/checkout@v3
+      with:
+        path: dev-branch
+        ref: dev
+
+    - name: QA Config Checkout
+      uses: actions/checkout@v3
+      with:
+        path: qa-branch
+        ref: qa
+
+    - name: PROD Config Checkout
+      uses: actions/checkout@v3
+      with:
+        path: prod-branch
+        ref: prod
+
+    - name: 취합 브랜치 Checkout
+      uses: actions/checkout@v3
+      with:
+        path: cfgstore-consolidate
+        ref: cfgstore-consolidate
+        token: ${{ secrets.GHP_TOKEN }}
+
+    - name: Application Configuration 파일 취합
+      working-directory: cfgstore-consolidate
+      if: needs.check-files.outputs.config_flag == 'true'
+      run: |
+        DIR_TYPE=configuration
+        FILE_TYPE=config
+
+        if [ ! -d ${DIR_TYPE} ]
+        then
+          mkdir -p ${DIR_TYPE}
+        else
+          rm -rf ${DIR_TYPE}/*
+        fi
+
+        for branch in dev qa prod
+        do
+          cp -R ../${branch}-branch/${DIR_TYPE}/* ${DIR_TYPE}
+        done
+
+    - name: EKS 파일 취합
+      working-directory: cfgstore-consolidate
+      if: needs.check-files.outputs.eks_flag == 'true'
+      run: |
+        DIR_TYPE=aws-eks
+        FILE_TYPE=yaml
+
+        if [ ! -d ${DIR_TYPE} ]
+        then
+          mkdir -p ${DIR_TYPE}
+        else
+          rm -rf ${DIR_TYPE}/*
+        fi
+        
+        for branch in dev qa prod
+        do
+          cp -R ../${branch}-branch/${DIR_TYPE}/* ${DIR_TYPE}
+        done
+
+    - name: CodeDeploy 파일 취합
+      working-directory: cfgstore-consolidate
+      if: needs.check-files.outputs.codedeploy_flag == 'true'
+      run: |
+        DIR_TYPE=aws-codedeploy
+        FILE_TYPE=scripts
+
+        if [ ! -d ${DIR_TYPE} ]
+        then
+          mkdir -p ${DIR_TYPE}
+        else
+          rm -rf ${DIR_TYPE}/*
+        fi
+
+        for branch in dev qa prod
+        do
+          cp -R ../${branch}-branch/${DIR_TYPE}/* ${DIR_TYPE}
+        done
+
+    - name: Git Status 확인
+      id: git-status
+      working-directory: cfgstore-consolidate
+      run: |
+        git status
+        
+        COMMIT_STATUS=`git status | grep "nothing to commit, working tree clean" | wc -l`
+        if [[ ${COMMIT_STATUS} == 1 ]]
+        then
+          echo "Configuration 변경 없음"
+          echo "COMMIT=false" >> $GITHUB_ENV
+        else
+          echo "COMMIT=true" >> $GITHUB_ENV
+        fi
+
+    - name: 취합 브랜치 업데이트
+      working-directory: cfgstore-consolidate
+      run: |
+        sudo timedatectl set-timezone Asia/Seoul
+
+        if [[ ${COMMIT} == "true" ]]
+        then
+          git config user.name cfgstore.consolidate
+          git config user.email cfgstore.consolidate@lguplus.co.kr
+          git add .
+          git commit -m "Consolidate Cfgstore - $(date)" \
+                     -m "Trigger : "${{ github.ref_name }} \
+                     -m "Actor : "${{ github.actor }}
+          git push
+        else
+          echo "Configuration 변경 없음"
+        fi
