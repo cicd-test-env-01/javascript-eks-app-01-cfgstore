@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: javascript-eks-app-01-cfgstore
-          image: 521651615177.dkr.ecr.ap-northeast-2.amazonaws.com/ecr-dev-cicd-test-env-01-javascript-eks-app-01:7ce8d073
+          image: 521651615177.dkr.ecr.ap-northeast-2.amazonaws.com/ecr-dev-cicd-test-env-01-javascript-eks-app-01:83118ccd
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
