@@ -1,6 +1,0 @@
-kind: Namespace
-apiVersion: v1
-metadata:
-  name: cicd-test-env-01
-  labels:
-    name: cicd-test-env-01
