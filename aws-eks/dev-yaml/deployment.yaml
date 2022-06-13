@@ -21,3 +21,16 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
+          volumeMounts:
+            #override config.js file
+            - name: config
+              mountPath: '/app/config/config.json'
+              subPath: 'config.json'
+      terminationGracePeriodSeconds: 10
+      volumes:
+        - name: config
+          configMap:
+            name: javascript-eks-app-01-configmap
+            items:
+              - key: 'db.properties'
+                path: 'config.json'
