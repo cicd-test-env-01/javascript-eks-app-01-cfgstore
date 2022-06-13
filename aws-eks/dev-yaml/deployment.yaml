@@ -23,8 +23,8 @@ spec:
             - containerPort: 8080
           volumeMounts:
             - name: config
-              mountPath: '/app/config/default.json'
-      #              subPath: 'default.json'
+              mountPath: '/app/config'
+              subPath: 'default.json'
       terminationGracePeriodSeconds: 10
       volumes:
         - name: config
