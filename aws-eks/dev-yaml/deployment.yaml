@@ -24,8 +24,8 @@ spec:
           volumeMounts:
             #override config.js file
             - name: config
-              mountPath: '/app/config/config.json'
-              subPath: 'config.json'
+              mountPath: '/app/config/default.json'
+              subPath: 'default.json'
       terminationGracePeriodSeconds: 10
       volumes:
         - name: config
@@ -33,4 +33,4 @@ spec:
             name: javascript-eks-app-01-configmap
             items:
               - key: 'db.properties'
-                path: 'config.json'
+                path: 'default.json'
