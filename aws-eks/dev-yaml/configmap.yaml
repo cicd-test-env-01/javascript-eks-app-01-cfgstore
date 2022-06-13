@@ -6,8 +6,8 @@ metadata:
 data:
   db.properties: |-
     {
-      "database": {
-        "db_user": "dev-username",
-        "db_password": "dev-password"
+      "Database": {
+        "dbUser": "dev-username",
+        "dbPassword": "dev-password"
       }
     }

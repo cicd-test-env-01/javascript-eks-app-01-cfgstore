@@ -6,7 +6,7 @@ metadata:
   labels:
     app: javascript-eks-app-01-cfgstore
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: javascript-eks-app-01-cfgstore
