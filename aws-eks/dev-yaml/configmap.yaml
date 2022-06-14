@@ -8,6 +8,6 @@ data:
     {
       "Server": {
         "key1": "dev-val1",
-        "key2": "dev-val2",
+        "key2": "dev-val2"
       }
     }
