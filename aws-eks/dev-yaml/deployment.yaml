@@ -25,11 +25,14 @@ spec:
             - name: config
               mountPath: '/app/config/default.json'
               subPath: 'default.json'
+          envFrom:
+            - secretRef:
+                name: app-secret
       terminationGracePeriodSeconds: 10
       volumes:
         - name: config
           configMap:
             name: javascript-eks-app-01-configmap
             items:
-              - key: 'db.properties'
+              - key: 'app.properties'
                 path: 'default.json'
