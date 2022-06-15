@@ -7,7 +7,9 @@ data:
   app.properties: |-
     {
       "Server": {
-        "key1": "dev-val1",
-        "key2": "dev-val2"
+        "testKey": "dev_test",
+        "kmsKeyID": "arn:aws:kms:ap-northeast-2:521651615177:key/6ca496ce-938b-4038-af90-e1614da7535c",
+        "dbUser": "FeBHJYc0zBQkw5yMcGJsixoh85Ed93SrVGsE603yXIuX9PFOX2Js9cXWsaZ/yU2OtCq59vCmkEiY54oy4sda0DqDILPryxE4+d4s/DsAM3fillFbCY+NyB6BQfwV6Ad0lAKzd834Gu5+ugxXE66uX16oW+UE9ZEKO0Nr0wGuDeTT0+q2fqop9cpXHPYj2z1DXCsp93kCREpErDSDejEdJ1CIM8+Gw7DC1sR9C1No4dhKyOeo1038c2prdxbLT+/fOlp+74m9pmjwT4Quf//1sFp31FjH++SEz6eAFyF6bLmhN97SlJwZPsjaR3Pg572FtlhZw8tE8w/hBdnYltML5dfgczxnNSlEjSZmA+yD9F22Y0+KmSEwM6TiWovFaq8euMrG/X6zE68XVVys+rltYk3fd4/gAEu3OYIN/M+FoWaJj9KDU1pp0x7Io0ED0LIsSh3dGQ52/BYkdauuUP1io/7As+9FTRcBp3hyFI5MT612+92Kz3dB4t5MoxC8tKDwXr1W6Ro2skDR4+aczEl8lXmTId1pr9yF32UHwXabN/MR2Xjsd26GlAUDbm0DccjXVjGfoF3koABAWh5OgojTFT7zc5n4zcAIyVnTO4Zag5yGOMMRSc/ZB0kBsbItg5pzmN+EgcT7SKofgjfLVQJKr7lzS8gh0hiriYVudatR7l0=",
+        "dbPassword": "W14Z74Ko4nL3cUvaGiwLz/UfoG4+s/MmlDw2AfQtTh3kNHEYs/rh8S5jQvfyJqiDI9aVuzCw23fxVWcfTuDQXHWmtikmKENECiwZ8gC7Ky6Ym/ehbVd2oc6gt2JPZfy0OWVDsmtiVE4CjriGczCzAfkEWpTEjdQBgIKDxgwj+o9GCOyn0KOy9LC31wsedmxMAYd9mX7dATxlukF4/c+i2FjEQC3/LyJXzwzw5bY3XwUDnnBmxPdbYdqXqRHSF6hqhucvpwDwLlNKwRUtrtZ9ylBSWEsyutq9vaQclVUs4T379raV26tO8eGNclg8B5VRXQy19rCGmLM4PXMVNKHHcV/6NpnD+Vt1wsCzSdeBWgzClcnJvynzYb8A0VP4hDFkTLFl4Qsd29q9Xi9z0KLLvXEWU3WE9F/XkEQC1uQEiuW1xyAFm1BdCBVoO+Cfj2rCIJT1zYSgIpczcJf3l65UEZcSRxoGPBBRAFfo/EPl2o+f1wvado8yQ5qmC3T8mYzOH513Ed0psSku0gzJiYdwhq/EggTSjAZ1/TNGDHL1j5jR9SRfxOMnbxlUL7k9sNHNuOG3ZJuEKxHbUU1M60W1EoJM9qX8KsbkhQQk4T9n5ujDHMnaqWa2RDZNY9paKxsmtAHwPzJNHMC+0tooIACtC8sA5XnAQHD2GYtlr9D8GWY="
       }
     }
