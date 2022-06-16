@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-efs-static-test-01
+  namespace: cicd-test-env-01
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: sc-efs-static
+  resources:
+    requests:
+      storage: 1Gi
