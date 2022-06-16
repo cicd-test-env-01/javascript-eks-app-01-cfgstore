@@ -25,6 +25,8 @@ spec:
             - name: config
               mountPath: '/app/config/default.json'
               subPath: 'default.json'
+            - name: pv-log
+              mountPath: /log
       volumes:
         - name: config
           configMap:
@@ -32,3 +34,6 @@ spec:
             items:
               - key: 'app.properties'
                 path: 'default.json'
+        - name: pv-log
+          persistentVolumeClaim:
+            claimName: pvc-efs-static-test-01
