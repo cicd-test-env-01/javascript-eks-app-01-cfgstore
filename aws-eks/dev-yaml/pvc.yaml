@@ -10,3 +10,16 @@ spec:
   resources:
     requests:
       storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-efs-dynamic-test-01
+  namespace: cicd-test-env-01
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: sc-efs-dynamic
+  resources:
+    requests:
+      storage: 1Gi
